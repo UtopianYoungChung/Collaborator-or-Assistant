@@ -1,8 +1,8 @@
 # Collaborator or Assistant? How AI Coding Agents Partition Work Across Pull Request Lifecycles
 
 Research home for the AIware 2026 paper of the same name. This repository gathers, in one place, the
-**paper**, the **poster**, and the **raw PR-timeline data** so that other researchers can read, present,
-and build on the work.
+**paper**, the **poster**, and a full **replication package** (analysis code, methodology, and the raw
+PR-timeline data) so that other researchers can read, present, reproduce, and build on the work.
 
 - **Authors:** Young Jo(seph) Chung and Safwat Hassan (University of Toronto)
 - **Venue:** AIware '26 — ACM International Conference on AI-Powered Software Engineering, July 6–7, 2026, Montreal, Canada
@@ -29,9 +29,12 @@ The paper contributes the taxonomy, per-tool state machines, and this replicatio
 | --- | --- |
 | [`paper/`](paper/) | The published paper (PDF) and its camera-ready LaTeX source. |
 | [`poster/`](poster/) | The 24×36 in. conference poster (PDF + PowerPoint). |
-| [`data/`](data/) | Raw per-tool PR-timeline event logs (Git LFS). |
+| [`replication_package/`](replication_package/) | Run scripts, requirements, and replication docs (`DATA_ACCESS.md`, `METHODOLOGY_SUMMARY.md`, `SOURCE_OF_TRUTH.md`). |
+| [`src/`](src/) | Analysis code (`src/analysis/`) that produces the statistics and figures. |
+| [`config/`](config/) | Methodology protocol, phase definitions, and statistical-testing plan. |
+| [`data/raw/`](data/raw/) | Raw per-tool PR-timeline event logs (Git LFS). |
 | [`CITATION.cff`](CITATION.cff) | Machine-readable citation metadata. |
-| [`LICENSE`](LICENSE) | MIT license for the documentation in this repository. |
+| [`LICENSE`](LICENSE) | MIT license for the code and documentation in this repository. |
 
 ### Paper
 
@@ -46,39 +49,64 @@ required to compile.
 [`poster/`](poster/) holds the conference poster as PDF and editable PowerPoint. It tells the six-scenario
 Initiator × Approver story end to end.
 
-## Data
+## Replication package
 
-The raw PR-timeline logs in `data/` underpin the paper's analysis.
+The replication package reproduces the paper's statistics and figures from the raw PR-timeline data. It
+has three parts: the **analysis code** (`src/`), the **methodology and run scripts** (`replication_package/`,
+`config/`), and the **raw data** (`data/raw/`). See
+[`replication_package/README.md`](replication_package/README.md) for the full walkthrough and
+[`replication_package/SOURCE_OF_TRUTH.md`](replication_package/SOURCE_OF_TRUTH.md) for the
+manuscript-to-artifact mapping (RQ1–RQ3, threats, construct validity).
 
 ### Data provenance
 
-The PR-timeline logs in `data/` are derived from the **AIDev** dataset of agent-associated pull requests
+The PR-timeline logs in `data/raw/` are derived from the **AIDev** dataset of agent-associated pull requests
 (Li, Zhang & Hassan), released on Hugging Face as
-[`hao-li/AIDev`](https://huggingface.co/datasets/hao-li/AIDev) under CC-BY-4.0. The files here cover the
-five agents in AIDev's curated (>100-star) subset:
+[`hao-li/AIDev`](https://huggingface.co/datasets/hao-li/AIDev) under CC-BY-4.0. The files cover the five
+agents in AIDev's curated (>100-star) subset:
 
 ```
-data/pr_timelines_Claude_Code.json
-data/pr_timelines_Copilot.json
-data/pr_timelines_Cursor.json
-data/pr_timelines_Devin.json
-data/pr_timelines_OpenAI_Codex.json
+data/raw/pr_timelines_Claude_Code.json
+data/raw/pr_timelines_Copilot.json
+data/raw/pr_timelines_Cursor.json
+data/raw/pr_timelines_Devin.json
+data/raw/pr_timelines_OpenAI_Codex.json
 ```
 
 Each file is a JSON object keyed by PR identifier, whose values are arrays of timeline event objects. The
-paper's analytic sample of 29,585 lifecycles is obtained after the exclusions documented in Section 3 of
-the paper (e.g., PRs with no commit event). These files are stored with **Git LFS**.
+~33,600 raw PRs reduce to the paper's analytic sample of **29,585 lifecycles** after the exclusions
+documented in Section 3 of the paper (e.g., PRs with no commit event). These files are stored with **Git
+LFS**.
 
-### Getting the data
+### How to reproduce
 
-Install [Git LFS](https://git-lfs.com/) and clone with the large files:
+1. Install [Git LFS](https://git-lfs.com/) and clone with the large files:
 
-```bash
-git lfs install
-git clone https://github.com/UtopianYoungChung/AIWare2026.git
-cd AIWare2026
-git lfs pull
-```
+   ```bash
+   git lfs install
+   git clone https://github.com/UtopianYoungChung/AIWare2026.git
+   cd AIWare2026
+   git lfs pull
+   ```
+
+2. Install the Python dependencies (Python 3.9+):
+
+   ```bash
+   pip install -r replication_package/requirements.txt
+   ```
+
+3. Run the full pipeline from the repository root:
+
+   ```bash
+   bash replication_package/run_replication.sh    # Unix/macOS
+   replication_package\run_replication.bat        # Windows
+   ```
+
+   The scripts read `data/raw/` and write statistics to `.tmp/` and figures to
+   `AIWare2026_CameraReady_Package/figures/`. Individual steps (evidence statistics, phase-transition
+   networks, within-tool comparison, temporal trends, downsampling robustness, within-repository control,
+   and the figures) can also be run on their own — see
+   [`replication_package/README.md`](replication_package/README.md).
 
 > **Reproducibility note.** `committed` and `reviewed` events in the AIDev timelines carry no timestamps,
 > so phase boundaries that depend on those events are derived from event *sequence* rather than wall-clock
@@ -101,11 +129,12 @@ metadata, or use:
 }
 ```
 
-Please also cite the underlying dataset (AIDev, `hao-li/AIDev`, CC-BY-4.0) when you use the data in `data/`.
+Please also cite the underlying dataset (AIDev, `hao-li/AIDev`, CC-BY-4.0) when you use the data in
+`data/raw/`.
 
 ## License
 
-The documentation in this repository is released under the [MIT License](LICENSE). The data in `data/` is
-derived from the AIDev dataset and remains subject to its original **CC-BY-4.0** terms. The paper and
-poster PDFs are the authors' published/accepted artifacts and are shared here for academic use with
-attribution.
+The code and documentation in this repository are released under the [MIT License](LICENSE). The data in
+`data/raw/` is derived from the AIDev dataset and remains subject to its original **CC-BY-4.0** terms. The
+paper and poster PDFs are the authors' published/accepted artifacts and are shared here for academic use
+with attribution.

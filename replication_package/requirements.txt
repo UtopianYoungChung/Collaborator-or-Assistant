@@ -1,0 +1,12 @@
+# Replication package dependencies for AIWare 2026
+# Install: pip install -r replication_package/requirements.txt
+
+# Core analysis (standard library only for workflows, evidence_stats, network_extraction, stream_pr_timelines)
+# No extra packages required for Steps 1-2
+
+# Visualization (Steps 3-4)
+matplotlib>=3.5.0
+numpy>=1.20.0
+
+# Optional: higher-quality state machine PDFs (falls back to matplotlib if unavailable)
+graphviz>=0.20.0

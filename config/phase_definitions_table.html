@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Phase Definitions – Google Docs</title>
+  <style>
+    table { border-collapse: collapse; font-family: Arial, sans-serif; font-size: 11pt; }
+    th, td { border: 1px solid #000; padding: 6px 10px; text-align: left; vertical-align: top; }
+    th { background: #f0f0f0; font-weight: bold; }
+    .phase { font-weight: bold; }
+    code { font-family: 'Consolas', monospace; }
+  </style>
+</head>
+<body>
+  <p><strong>3.3.2 Phase Definitions</strong></p>
+  <p>Phases are assigned using a temporal state machine implemented in <code>src.analysis.workflows.assign_phases_temporal</code>. Terminal outcomes are distinguished as <strong>Merged and closed</strong> vs <strong>Unmerged and closed</strong> (event type <code>merged</code> vs <code>closed</code>).</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Phase / Terminal</th>
+        <th>Entry condition</th>
+        <th>Exit condition</th>
+        <th>Events captured</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="phase">Initiation</td>
+        <td>PR created</td>
+        <td>First <code>committed</code> or <code>closed</code></td>
+        <td><code>assigned</code>, <code>labeled</code>, early <code>review_requested</code></td>
+      </tr>
+      <tr>
+        <td class="phase">Development</td>
+        <td>First <code>committed</code> event in PR timeline</td>
+        <td>First <code>review_requested</code> after commits, or <code>merged</code>/<code>closed</code></td>
+        <td><code>committed</code>, <code>commented</code>, <code>head_ref_force_pushed</code></td>
+      </tr>
+      <tr>
+        <td class="phase">Review</td>
+        <td><code>review_requested</code></td>
+        <td><code>reviewed:CHANGES_REQUESTED</code> (→ REVISION) or <code>merged</code>/<code>closed</code></td>
+        <td><code>reviewed</code>, <code>commented</code>, <code>review_requested</code></td>
+      </tr>
+      <tr>
+        <td class="phase">Revision</td>
+        <td><code>reviewed:CHANGES_REQUESTED</code></td>
+        <td>Next <code>review_requested</code> (→ REVIEW) or <code>merged</code>/<code>closed</code></td>
+        <td><code>committed</code>, <code>commented</code></td>
+      </tr>
+      <tr>
+        <td class="phase">Merged and closed</td>
+        <td><code>merged</code></td>
+        <td>— (terminal)</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td class="phase">Unmerged and closed</td>
+        <td><code>closed</code></td>
+        <td>— (terminal)</td>
+        <td>—</td>
+      </tr>
+    </tbody>
+  </table>
+  <p><em>Initiation</em> may be empty in observed event order (e.g. first event is already <code>committed</code>). Edge case: PR closed before any commit → Initiation → Unmerged and closed. <em>Development entry:</em> the first <code>committed</code> is the first commit <em>event</em> in the PR event stream; it is usually part of the source branch when the PR was opened, not necessarily a commit made after the PR was created. <em>Review:</em> <code>APPROVED</code> does not end the PR; workflow remains in Review until a terminal event. A PR without a formal <code>review_requested</code> event goes from Development directly to merged/closed. <em>Revision:</em> a revision cycle is counted only when <code>CHANGES_REQUESTED</code> is followed by ≥1 <code>committed</code> before the next <code>review_requested</code>. Terminal states are absorbing (Merged and closed = PR was merged; Unmerged and closed = PR was closed without merge).</p>
+</body>
+</html>
