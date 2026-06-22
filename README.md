@@ -28,7 +28,7 @@ The paper contributes the taxonomy, per-tool state machines, and this replicatio
 | Path | Contents |
 | --- | --- |
 | [`paper/`](paper/) | The published paper (PDF) and its camera-ready LaTeX source. |
-| [`poster/`](poster/) | The 24×36 in. conference poster (PDF + PowerPoint). |
+| [`poster/`](poster/) | The 24×36 in. conference poster (PDF). |
 | [`replication_package/`](replication_package/) | Run scripts, requirements, and replication docs (`DATA_ACCESS.md`, `METHODOLOGY_SUMMARY.md`, `SOURCE_OF_TRUTH.md`). |
 | [`src/`](src/) | Analysis code (`src/analysis/`) that produces the statistics and figures. |
 | [`config/`](config/) | Methodology protocol, phase definitions, and statistical-testing plan. |
@@ -46,8 +46,8 @@ required to compile.
 
 ### Poster
 
-[`poster/`](poster/) holds the conference poster as PDF and editable PowerPoint. It tells the six-scenario
-Initiator × Approver story end to end.
+[`poster/`](poster/) holds the conference poster as PDF. It tells the six-scenario Initiator × Approver
+story end to end.
 
 ## Replication package
 
