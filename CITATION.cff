@@ -1,0 +1,42 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite the paper below."
+title: "Collaborator or Assistant? How AI Coding Agents Partition Work Across Pull Request Lifecycles"
+abstract: >-
+  When AI coding agents open branches and submit pull requests (PRs), two questions co-determine
+  oversight design: who starts the work (operational agency) and who authorizes its completion
+  (merge governance). This study shows that tools occupy a Collaborator--Assistant spectrum on
+  initiation and review routing, while merge governance remains predominantly human across five
+  tools (OpenAI Codex, GitHub Copilot, Devin, Cursor, Claude Code). It analyzes 29,585 PR lifecycles
+  using an Initiator x Approver taxonomy with six interaction scenarios and contributes the taxonomy,
+  per-tool state machines, and a replication package.
+type: software
+authors:
+  - family-names: Chung
+    given-names: "Young Jo(seph)"
+    affiliation: University of Toronto
+    email: jo.chung@utoronto.ca
+  - family-names: Hassan
+    given-names: Safwat
+    affiliation: University of Toronto
+    email: Safwat.hassan@utoronto.ca
+repository-code: "https://github.com/UtopianYoungChung/AIWare2026"
+license: MIT
+year: 2026
+preferred-citation:
+  type: conference-paper
+  title: "Collaborator or Assistant? How AI Coding Agents Partition Work Across Pull Request Lifecycles"
+  authors:
+    - family-names: Chung
+      given-names: "Young Jo(seph)"
+      affiliation: University of Toronto
+    - family-names: Hassan
+      given-names: Safwat
+      affiliation: University of Toronto
+  collection-title: "Proceedings of the ACM International Conference on AI-Powered Software Engineering (AIware '26)"
+  conference:
+    name: "ACM International Conference on AI-Powered Software Engineering (AIware '26)"
+    city: Montreal
+    country: CA
+    date-start: 2026-07-06
+    date-end: 2026-07-07
+  year: 2026
